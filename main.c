@@ -27,18 +27,21 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <windows.h>
 /**
  * Le menu principale du jeu
  */
 
-#define GRILLES {{0, 0, 0, 0, 0, 0, 0, 0}, \
-                {0, 0, 0, 0, 0, 0, 0, 0},  \
-                {0, 0, 0, 0, 0, 0, 0, 0},  \
-                {0, 0, 0, 0, 0, 0, 0, 0},  \
-                {0, 0, 0, 0, 0, 0, 0, 0},  \
-                {0, 0, 0, 0, 0, 0, 0, 0},  \
-                {0, 0, 0, 0, 0, 0, 0, 0},  \
-                {0, 0, 0, 0, 0, 0, 0, 0}}
+const int grille[10][10] = {{0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
 void menu()
 {
     printf("================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n                    ()\n"
@@ -69,14 +72,31 @@ void menu()
 void jeuxBatailleNavale()
 {
     system("cls");
-    printf("\nBataille Navale\n");
+    printf("\nBataille Navale\n\n\n");
+
+    for (int ligne = 0; ligne < 20; ++ligne)
+    {
+        for (int i = 0; i < 20; ++i)
+        {
+            printf("╔══════════════════════╗");
+        }
+    }
+
+
+    printf("\n\n");
     system("pause");
 }
 
 void affichageDaide()
 {
     system("cls");
-    printf("================================== ~~~~~  Aide du jeux  ~~~~~ ==================================\n\n");
+    printf("================================== ~~~~~  Aide du jeux  ~~~~~ ==================================\n\n\n\n");
+    printf("\nLe but du jeux est de coulé tout les bateaux sur la grille.\n\n");
+    printf("Mettez les coordonnées x et y pour envoyé un missile sur cette case.\n\n");
+    printf("vous saurez si vous avez touché un bateau par un symbol, X si le missile a touché un bateau et O si il a loupé.\n\n");
+    printf("Vous devez touché toutes les cases d'un bateau pour le couler.\n\n");
+    printf("Utiliser le moin de missile au total pour avoir le plus de point.\n\n\n\n\n\n");
+    system("pause");
 }
 
 void changementDesMenus(int choix)
@@ -97,10 +117,10 @@ void changementDesMenus(int choix)
 int main(void)
 {
     int choix;
-
     //prendant que l'utilisateur ne choisi pas l'option "quiter" le programme continue
     do
     {
+        SetConsoleOutputCP(65001); //Utilisé pour afficher les accents
         system("cls");
         menu();
         scanf("%d", &choix);
