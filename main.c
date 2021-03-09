@@ -28,20 +28,21 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-/**
- * Le menu principale du jeu
- */
+
 
 const int grille[10][10] = {{0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                            {0, 1, 1, 1, 1, 1, 1, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+                            {0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
+                            {0, 1, 1, 1, 1, 0, 0, 0, 0, 0}};
+/**
+ * Le menu principale du jeu
+ */
 void menu()
 {
     printf("================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n                    ()\n"
@@ -69,24 +70,91 @@ void menu()
     printf("---- 3: Quiter\n\n");
 }
 
-void jeuxBatailleNavale()
+/**
+ * vérifie si les coordonnées sont valide et si elle touche un bateau
+ * @param coordonneeX
+ * @param coordonneeY
+ * @return
+ */
+int verificationDesCoordonnees(int coordonneeX,int coordonneeY)
 {
+    if (coordonneeX < 1 || coordonneeX > 10 || coordonneeY < 1 ||coordonneeY >10)
+    {
+        printf("\n\n Ces coordonnée ne sont pas valide");
+    }
+    return 0;
+}
+
+/**
+ * affiche la grille pour la bataille navale
+ */
+void grilleBatailleNavale() {
+    //déclaration de variable
+    int coordonneeX,
+        coordonneeY;
+    do
+    {
     system("cls");
     printf("\nBataille Navale\n\n\n");
 
-    for (int ligne = 0; ligne < 20; ++ligne)
-    {
-        for (int i = 0; i < 20; ++i)
-        {
-            printf("╔══════════════════════╗");
+    //commencement de la grille
+    printf("╔");
+    for (int premiereLigne = 0; premiereLigne < 10; ++premiereLigne) {
+        for (int i = 0; i < 5; ++i) {
+            printf("═");
+        }
+        if (premiereLigne != 9) {
+            printf("╦");
         }
     }
+    printf("╗");
+    printf("\n");
+    //toutes les lignes intermédiaires de la grille
+    for (int ligneMilieux = 1; ligneMilieux <= 10; ++ligneMilieux) {
+        for (int i = 0; i < 2; ++i) {
+            for (int v = 0; v < 11; ++v) {
+                printf("║     ");
+            }
+            printf("\n");
+        }
+        if (ligneMilieux != 10) {
+            printf("╠═════");
+            for (int v = 0; v < 9; ++v) {
+                printf("╬═════");
+            }
+            printf("╣");
+            printf("\n");
+        }
+    }
+    //dernière ligne de la grille
+    printf("╚");
+    for (int derniereLigne = 0; derniereLigne < 10; ++derniereLigne) {
+        for (int i = 0; i < 5; ++i) {
+            printf("═");
+        }
+        if (derniereLigne != 9) {
+            printf("╩");
+        }
+    }
+    printf("╝");
+    //demande les coordonnées
+    printf("\n\nPremière coordonnée : ");
+    fflush(stdin);
+    scanf("%d", &coordonneeX);
+    printf("\nDeuxième coordonnée : ");
+    fflush(stdin);
+    scanf("%d", &coordonneeY);
 
-
-    printf("\n\n");
-    system("pause");
+    //vérifie les coordonnées si il est valide et/ou si il touche un bateau
+    verificationDesCoordonnees(coordonneeX, coordonneeY);
+    }
+    //condition temporaire pendant que le reste du code soit complémenté
+    while (coordonneeY != 35);
 }
 
+/**
+ * affiche l'aide du jeux
+ */
 void affichageDaide()
 {
     system("cls");
@@ -104,7 +172,8 @@ void changementDesMenus(int choix)
     switch (choix)
     {
         case 1:
-            jeuxBatailleNavale();
+            //Affiche la grille pour la bataille navale et éxecute les autres fonctions pour la bataille navale
+            grilleBatailleNavale();
             break;
         case 2:
             affichageDaide();
@@ -117,13 +186,16 @@ void changementDesMenus(int choix)
 int main(void)
 {
     int choix;
+    SetConsoleOutputCP(65001); //Utilisé pour afficher les accents
     //prendant que l'utilisateur ne choisi pas l'option "quiter" le programme continue
     do
     {
-        SetConsoleOutputCP(65001); //Utilisé pour afficher les accents
         system("cls");
+        //affichage du menu
         menu();
+        fflush(stdin);
         scanf("%d", &choix);
+        //change d'option selon le choix de l'utilisateur
         changementDesMenus(choix);
     }
     while (choix != 3);
