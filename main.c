@@ -29,7 +29,6 @@
 #include <stdlib.h>
 #include <windows.h>
 
-
 const int grille[10][10] = {{0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -76,13 +75,22 @@ void menu()
  * @param coordonneeY
  * @return
  */
-int verificationDesCoordonnees(int coordonneeX,int coordonneeY)
+int verificationDesCoordonnees(int coordonneeX,int coordonneeY,int aireDeJeux[10][10])
 {
     if (coordonneeX < 1 || coordonneeX > 10 || coordonneeY < 1 ||coordonneeY >10)
     {
-        printf("\n\n Ces coordonnée ne sont pas valide");
+        printf("\n\nCes coordonnée ne sont pas valide\n");
     }
-    return 0;
+    else if (aireDeJeux[coordonneeX - 1][coordonneeY - 1] != 0)
+    {
+        printf("\n\nCette case à déjà été touché\n");
+    }
+    else
+    {
+        aireDeJeux[coordonneeX-1][coordonneeY-1] = 1;
+    }
+    system("pause");
+    return aireDeJeux;
 }
 
 /**
@@ -92,6 +100,17 @@ void grilleBatailleNavale() {
     //déclaration de variable
     int coordonneeX,
         coordonneeY;
+    //enregistre les case qui ont déjà été touché et/ou les bateaux qui ont été détruit
+    int aireDeJeux[10][10] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+                              {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
     do
     {
     system("cls");
@@ -111,12 +130,24 @@ void grilleBatailleNavale() {
     printf("\n");
     //toutes les lignes intermédiaires de la grille
     for (int ligneMilieux = 1; ligneMilieux <= 10; ++ligneMilieux) {
-        for (int i = 0; i < 2; ++i) {
-            for (int v = 0; v < 11; ++v) {
-                printf("║     ");
+        for (int i = 0; i < 2; ++i)
+        {
+            //pour les bordures de gauche et de droite des cellules
+            for (int v = 1; v <= 11; ++v)
+            {
+                //affiche les cellules qui ont été touché
+                if (aireDeJeux[v-1][ligneMilieux-1] > 0)
+                {
+                    printf("║ XXX ");
+                }
+                else
+                {
+                    printf("║     ");
+                }
             }
             printf("\n");
         }
+        //bordure du bas d'une cellule
         if (ligneMilieux != 10) {
             printf("╠═════");
             for (int v = 0; v < 9; ++v) {
@@ -146,7 +177,7 @@ void grilleBatailleNavale() {
     scanf("%d", &coordonneeY);
 
     //vérifie les coordonnées si il est valide et/ou si il touche un bateau
-    verificationDesCoordonnees(coordonneeX, coordonneeY);
+    aireDeJeux[10][10] = verificationDesCoordonnees(coordonneeX, coordonneeY, aireDeJeux);
     }
     //condition temporaire pendant que le reste du code soit complémenté
     while (coordonneeY != 35);
