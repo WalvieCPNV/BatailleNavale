@@ -32,13 +32,13 @@
 const int grille[10][10] = {{0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 1, 1, 1, 1, 1, 1, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
+                            {0, 2, 2, 2, 2, 2, 3, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 3, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 1, 1, 1, 0, 0, 0, 0},
-                            {0, 1, 1, 1, 1, 0, 0, 0, 0, 0}};
+                            {0, 0, 0, 4, 4, 4, 0, 0, 0, 0},
+                            {0, 5, 5, 5, 5, 0, 0, 0, 0, 0}};
 /**
  * Le menu principale du jeu
  */
@@ -69,6 +69,23 @@ void menu()
     printf("---- 3: Quiter\n\n");
 }
 
+int bateauToucher(int coordonneeX,int coordonneeY,int aireDeJeux[10][10])
+{
+    if (grille[coordonneeY-1][coordonneeX-1] > 0)
+    {
+        aireDeJeux[coordonneeY-1][coordonneeX-1] = 2;
+        printf("\n\nToucher ^^\n");
+        system("pause");
+    }
+    else
+    {
+        aireDeJeux[coordonneeY-1][coordonneeX-1] = 1;
+        printf("\n\nPlouf ^^\n");
+        system("pause");
+    }
+    return aireDeJeux;
+}
+
 /**
  * vérifie si les coordonnées sont valide et si elle touche un bateau
  * @param coordonneeX
@@ -80,16 +97,17 @@ int verificationDesCoordonnees(int coordonneeX,int coordonneeY,int aireDeJeux[10
     if (coordonneeX < 1 || coordonneeX > 10 || coordonneeY < 1 ||coordonneeY >10)
     {
         printf("\n\nCes coordonnée ne sont pas valide\n");
+        system("pause");
     }
-    else if (aireDeJeux[coordonneeX - 1][coordonneeY - 1] != 0)
+    else if (aireDeJeux[coordonneeY - 1][coordonneeX - 1] != 0)
     {
         printf("\n\nCette case à déjà été touché\n");
+        system("pause");
     }
     else
     {
-        aireDeJeux[coordonneeX-1][coordonneeY-1] = 1;
+        aireDeJeux[10][10] = bateauToucher(coordonneeX,coordonneeY,aireDeJeux);
     }
-    system("pause");
     return aireDeJeux;
 }
 
@@ -129,16 +147,21 @@ void grilleBatailleNavale() {
     printf("╗");
     printf("\n");
     //toutes les lignes intermédiaires de la grille
-    for (int ligneMilieux = 1; ligneMilieux <= 10; ++ligneMilieux) {
+    for (int ligneMilieux = 1; ligneMilieux <= 10; ++ligneMilieux)
+    {
         for (int i = 0; i < 2; ++i)
         {
             //pour les bordures de gauche et de droite des cellules
             for (int v = 1; v <= 11; ++v)
             {
                 //affiche les cellules qui ont été touché
-                if (aireDeJeux[v-1][ligneMilieux-1] > 0)
+                if (aireDeJeux[ligneMilieux-1][v-1] > 1 && v != 11)
                 {
-                    printf("║ XXX ");
+                    printf("║ ▓▓▓ ");
+                }
+                else if (aireDeJeux[ligneMilieux-1][v-1] > 0 && v != 11)
+                {
+                    printf("║ ░░░ ");
                 }
                 else
                 {
