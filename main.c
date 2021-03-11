@@ -95,6 +95,7 @@ int conditionGagner(int aireDeJeux[10][10])
     {
         for (int colonneB = 0; colonneB < 10; ++colonneB)
         {
+            //vérifie si un bateau a été touché et augmente le compteur pour ce bateaux
             if (grille[colonneA][colonneB] > 0 && aireDeJeux[colonneA][colonneB] > 0)
             {
                 switch (grille[colonneA][colonneB])
@@ -120,8 +121,10 @@ int conditionGagner(int aireDeJeux[10][10])
             }
         }
     }
+    //si tout les compteurs de bateaux sont égales a la valeur correcte, ça veux dire que tout les bateaux ont été touché
     if (bateau_1 == 2 && bateau_2 == 3 && bateau_3 == 3 && bateau_4 == 4 && bateau_5 == 5)
     {
+        //cette valeur est utilisé si le joueur a gagner
         aireDeJeux[9][9] = 100;
     }
     return aireDeJeux;
@@ -177,7 +180,9 @@ void grilleBatailleNavale() {
     //déclaration de variable
     int coordonneeX,
         coordonneeY;
-    //enregistre les case qui ont déjà été touché et/ou les bateaux qui ont été détruit
+    /**
+     * sert a définir ou le joueur a déjà tirer, 0 = pas tirer dessus, 1 = à l'eau, 2 = bateau touché
+     */
     int aireDeJeux[10][10] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -188,6 +193,8 @@ void grilleBatailleNavale() {
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
+
+    //continue en boucle la bataille navale jusqu'à ce que le joueur a touché tout les bateaux
     do
     {
     system("cls");
@@ -296,19 +303,47 @@ void changementDesMenus(int choix)
     }
 }
 
+/**
+ * Utilisé pour afficher les accents
+ */
+void affichagedaccent()
+{
+    SetConsoleOutputCP(65001);
+}
+
+/**
+ * éfface tout ce qui est sur l'écran
+ */
+void resetEcran()
+{
+    system("cls");
+}
+
+/**
+ * demande le choix du menu
+ * @param choix
+ * @return
+ */
+int demandeDuChoix(int choix)
+{
+    fflush(stdin);
+    scanf("%d", &choix);
+    return choix;
+}
+
 int main(void)
 {
     int choix;
-    SetConsoleOutputCP(65001); //Utilisé pour afficher les accents
+    affichagedaccent();
     //prendant que l'utilisateur ne choisi pas l'option "quiter" le programme continue
     do
     {
-        system("cls");
+        resetEcran();
         //affichage du menu
         menu();
-        fflush(stdin);
-        scanf("%d", &choix);
-        //change d'option selon le choix de l'utilisateur
+        //demande le choix de l'utilisateur
+        choix = demandeDuChoix(choix);
+        //change d'écran selon le choix de l'utilisateur
         changementDesMenus(choix);
     }
     while (choix != 3);
