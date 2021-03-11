@@ -29,16 +29,16 @@
 #include <stdlib.h>
 #include <windows.h>
 
-const int grille[10][10] = {{0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+const int grille[10][10] = {{0, 0, 2, 2, 2, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 2, 2, 2, 2, 2, 3, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 3, 0, 0, 0},
+                            {0, 5, 5, 5, 5, 5, 1, 0, 0, 0},
+                            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 4, 4, 4, 0, 0, 0, 0},
-                            {0, 5, 5, 5, 5, 0, 0, 0, 0, 0}};
+                            {0, 0, 0, 3, 3, 3, 0, 0, 0, 0},
+                            {0, 4, 4, 4, 4, 0, 0, 0, 0, 0}};
 /**
  * Le menu principale du jeu
  */
@@ -69,12 +69,71 @@ void menu()
     printf("---- 3: Quiter\n\n");
 }
 
+/**
+ * affiche l'écran de victoire
+ */
+void affichageGagner()
+{
+    system("cls");
+    printf("Vous avez gagner !!!!!!!!!\n\n\n");
+    system("pause");
+}
+
+/**
+ * vérifie si un bateau qui a été touché est coulé
+ */
+int conditionGagner(int aireDeJeux[10][10])
+{
+    //initialization des variables
+    int bateau_1 = 0,
+        bateau_2 = 0,
+        bateau_3 = 0,
+        bateau_4 = 0,
+        bateau_5 = 0;
+
+    for (int colonneA = 0; colonneA < 10; ++colonneA)
+    {
+        for (int colonneB = 0; colonneB < 10; ++colonneB)
+        {
+            if (grille[colonneA][colonneB] > 0 && aireDeJeux[colonneA][colonneB] > 0)
+            {
+                switch (grille[colonneA][colonneB])
+                {
+                    case 1:
+                        bateau_1++;
+                        break;
+                    case 2:
+                        bateau_2++;
+                        break;
+                    case 3:
+                        bateau_3++;
+                        break;
+                    case 4:
+                        bateau_4++;
+                        break;
+                    case 5:
+                        bateau_5++;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+    }
+    if (bateau_1 == 2 && bateau_2 == 3 && bateau_3 == 3 && bateau_4 == 4 && bateau_5 == 5)
+    {
+        aireDeJeux[9][9] = 100;
+    }
+    return aireDeJeux;
+}
+
 int bateauToucher(int coordonneeX,int coordonneeY,int aireDeJeux[10][10])
 {
     if (grille[coordonneeY-1][coordonneeX-1] > 0)
     {
         aireDeJeux[coordonneeY-1][coordonneeX-1] = 2;
         printf("\n\nToucher ^^\n");
+        aireDeJeux[10][10] = conditionGagner(aireDeJeux);
         system("pause");
     }
     else
@@ -203,7 +262,8 @@ void grilleBatailleNavale() {
     aireDeJeux[10][10] = verificationDesCoordonnees(coordonneeX, coordonneeY, aireDeJeux);
     }
     //condition temporaire pendant que le reste du code soit complémenté
-    while (coordonneeY != 35);
+    while (aireDeJeux[9][9] != 100);
+    affichageGagner();
 }
 
 /**
@@ -215,8 +275,7 @@ void affichageDaide()
     printf("================================== ~~~~~  Aide du jeux  ~~~~~ ==================================\n\n\n\n");
     printf("\nLe but du jeux est de coulé tout les bateaux sur la grille.\n\n");
     printf("Mettez les coordonnées x et y pour envoyé un missile sur cette case.\n\n");
-    printf("vous saurez si vous avez touché un bateau par un symbol, X si le missile a touché un bateau et O si il a loupé.\n\n");
-    printf("Vous devez touché toutes les cases d'un bateau pour le couler.\n\n");
+    printf("vous saurez si vous avez touché un bateau par un symbol, ▓ si le missile a touché un bateau et ░ si il a loupé.\n\n");
     printf("Utiliser le moin de missile au total pour avoir le plus de point.\n\n\n\n\n\n");
     system("pause");
 }
