@@ -88,10 +88,10 @@ int conditionGagner(int aireDeJeux[10][10])
 {
     //initialization des variables
     int bateau_1 = 0,
-        bateau_2 = 0,
-        bateau_3 = 0,
-        bateau_4 = 0,
-        bateau_5 = 0;
+            bateau_2 = 0,
+            bateau_3 = 0,
+            bateau_4 = 0,
+            bateau_5 = 0;
 
     for (int colonneA = 0; colonneA < 10; ++colonneA)
     {
@@ -206,98 +206,98 @@ void grilleBatailleNavale() {
     //continue en boucle la bataille navale jusqu'à ce que le joueur a touché tout les bateaux
     do
     {
-    system("cls");
-    printf("\n================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n");
-    printf("▓ == Touché\n\n");
-    printf("░ == à l'eau\n\n");
-    printf("Coordonnée Z:0 == quitter\n\n");
-    //Légende
+        system("cls");
+        printf("\n================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n");
+        printf("▓ == Touché\n\n");
+        printf("░ == à l'eau\n\n");
+        printf("Coordonnée Z:0 == quitter\n\n");
+        //Légende
         for (int legende = 0; legende < 10; ++legende)
         {
             printf("   %c  ",65 + legende);
         }
-    //commencement de la grille
-    printf("\n\n╔");
-    for (int premiereLigne = 0; premiereLigne < 10; ++premiereLigne)
-    {
-        for (int i = 0; i < 5; ++i)
+        //commencement de la grille
+        printf("\n\n╔");
+        for (int premiereLigne = 0; premiereLigne < 10; ++premiereLigne)
         {
-            printf("═");
-        }
-        if (premiereLigne != 9)
-        {
-            printf("╦");
-        }
-    }
-    printf("╗");
-    printf("\n");
-    //toutes les lignes intermédiaires de la grille
-    for (int ligneMilieux = 1; ligneMilieux <= 10; ++ligneMilieux)
-    {
-        for (int i = 0; i < 2; ++i)
-        {
-            //pour les bordures de gauche et de droite des cellules
-            for (int v = 1; v <= 11; ++v)
+            for (int i = 0; i < 5; ++i)
             {
-                //affiche les cellules qui ont été touché
-                if (aireDeJeux[ligneMilieux-1][v-1] > 1 && v != 11)
-                {
-                    printf("║ ▓▓▓ ");
-                }
-                else if (aireDeJeux[ligneMilieux-1][v-1] > 0 && v != 11)
-                {
-                    printf("║ ░░░ ");
-                }
-                else if (v == 11 && i%2 == 0)
-                {
-                    printf("║  %d",ligneMilieux);
-                }
-                else
-                {
-                    printf("║     ");
-                }
+                printf("═");
             }
-            printf("\n");
-        }
-        //bordure du bas d'une cellule
-        if (ligneMilieux != 10) {
-            printf("╠═════");
-            for (int v = 0; v < 9; ++v) {
-                printf("╬═════");
+            if (premiereLigne != 9)
+            {
+                printf("╦");
             }
-            printf("╣");
-            printf("\n");
         }
-    }
-    //dernière ligne de la grille
-    printf("╚");
-    for (int derniereLigne = 0; derniereLigne < 10; ++derniereLigne) {
-        for (int i = 0; i < 5; ++i) {
-            printf("═");
+        printf("╗");
+        printf("\n");
+        //toutes les lignes intermédiaires de la grille
+        for (int ligneMilieux = 1; ligneMilieux <= 10; ++ligneMilieux)
+        {
+            for (int i = 0; i < 2; ++i)
+            {
+                //pour les bordures de gauche et de droite des cellules
+                for (int v = 1; v <= 11; ++v)
+                {
+                    //affiche les cellules qui ont été touché
+                    if (aireDeJeux[ligneMilieux-1][v-1] > 1 && v != 11)
+                    {
+                        printf("║ ▓▓▓ ");
+                    }
+                    else if (aireDeJeux[ligneMilieux-1][v-1] > 0 && v != 11)
+                    {
+                        printf("║ ░░░ ");
+                    }
+                    else if (v == 11 && i%2 == 0)
+                    {
+                        printf("║  %d",ligneMilieux);
+                    }
+                    else
+                    {
+                        printf("║     ");
+                    }
+                }
+                printf("\n");
+            }
+            //bordure du bas d'une cellule
+            if (ligneMilieux != 10) {
+                printf("╠═════");
+                for (int v = 0; v < 9; ++v) {
+                    printf("╬═════");
+                }
+                printf("╣");
+                printf("\n");
+            }
         }
-        if (derniereLigne != 9) {
-            printf("╩");
+        //dernière ligne de la grille
+        printf("╚");
+        for (int derniereLigne = 0; derniereLigne < 10; ++derniereLigne) {
+            for (int i = 0; i < 5; ++i) {
+                printf("═");
+            }
+            if (derniereLigne != 9) {
+                printf("╩");
+            }
         }
-    }
-    printf("╝");
-    //demande les coordonnées
-    printf("\n\nPremière coordonnée (A-J) : ");
-    fflush(stdin);
-    scanf("%c", &coordonneeX);
-    printf("\nDeuxième coordonnée (1-10) : ");
-    fflush(stdin);
-    scanf("%d", &coordonneeY);
+        printf("╝");
+        //demande les coordonnées
+        printf("\n\nPremière coordonnée (A-J) : ");
+        fflush(stdin);
+        scanf("%c", &coordonneeX);
+        printf("\nDeuxième coordonnée (1-10) : ");
+        fflush(stdin);
+        scanf("%d", &coordonneeY);
 
-    if (coordonneeX == VALEUR_Z && coordonneeY == 0)
-    {
-        return;
+        if (coordonneeX == VALEUR_Z && coordonneeY == 0)
+        {
+            return;
+        }
+        //On soustrait par 65 car la valeur de A est de 65 en numérique
+        coordonneeX = coordonneeX - 64;
+        //vérifie les coordonnées si il est valide et/ou si il touche un bateau
+        aireDeJeux[10][10] = verificationDesCoordonnees(coordonneeX, coordonneeY, aireDeJeux);
     }
-    //On soustrait par 65 car la valeur de A est de 65 en numérique
-    coordonneeX = coordonneeX - 64;
-    //vérifie les coordonnées si il est valide et/ou si il touche un bateau
-    aireDeJeux[10][10] = verificationDesCoordonnees(coordonneeX, coordonneeY, aireDeJeux);
-    }
-    //condition temporaire pendant que le reste du code soit complémenté
+        //condition temporaire pendant que le reste du code soit complémenté
     while (aireDeJeux[9][9] != 100);
     affichageGagner();
 }
