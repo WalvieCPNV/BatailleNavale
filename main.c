@@ -29,6 +29,8 @@
 #include <stdlib.h>
 #include <windows.h>
 
+#define VALEUR_Z 90
+
 const int grille[10][10] = {{0, 0, 2, 2, 2, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -130,7 +132,14 @@ int conditionGagner(int aireDeJeux[10][10])
     return aireDeJeux;
 }
 
-int bateauToucher(int coordonneeX,int coordonneeY,int aireDeJeux[10][10])
+/**
+ * vérifie si le joueur a toucher un bateau ou non
+ * @param coordonneeX
+ * @param coordonneeY
+ * @param aireDeJeux
+ * @return
+ */
+int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
 {
     if (grille[coordonneeY-1][coordonneeX-1] > 0)
     {
@@ -154,7 +163,7 @@ int bateauToucher(int coordonneeX,int coordonneeY,int aireDeJeux[10][10])
  * @param coordonneeY
  * @return
  */
-int verificationDesCoordonnees(int coordonneeX,int coordonneeY,int aireDeJeux[10][10])
+int verificationDesCoordonnees(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
 {
     if (coordonneeX < 1 || coordonneeX > 10 || coordonneeY < 1 ||coordonneeY >10)
     {
@@ -178,8 +187,8 @@ int verificationDesCoordonnees(int coordonneeX,int coordonneeY,int aireDeJeux[10
  */
 void grilleBatailleNavale() {
     //déclaration de variable
-    int coordonneeX,
-        coordonneeY;
+    char coordonneeX;
+    int coordonneeY;
     /**
      * sert a définir ou le joueur a déjà tirer, 0 = pas tirer dessus, 1 = à l'eau, 2 = bateau touché
      */
@@ -198,15 +207,25 @@ void grilleBatailleNavale() {
     do
     {
     system("cls");
-    printf("\nBataille Navale\n\n\n");
-
+    printf("\n================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n");
+    printf("▓ == Touché\n\n");
+    printf("░ == à l'eau\n\n");
+    printf("Coordonnée Z:0 == quitter\n\n");
+    //Légende
+        for (int legende = 0; legende < 10; ++legende)
+        {
+            printf("   %c  ",65 + legende);
+        }
     //commencement de la grille
-    printf("╔");
-    for (int premiereLigne = 0; premiereLigne < 10; ++premiereLigne) {
-        for (int i = 0; i < 5; ++i) {
+    printf("\n\n╔");
+    for (int premiereLigne = 0; premiereLigne < 10; ++premiereLigne)
+    {
+        for (int i = 0; i < 5; ++i)
+        {
             printf("═");
         }
-        if (premiereLigne != 9) {
+        if (premiereLigne != 9)
+        {
             printf("╦");
         }
     }
@@ -228,6 +247,10 @@ void grilleBatailleNavale() {
                 else if (aireDeJeux[ligneMilieux-1][v-1] > 0 && v != 11)
                 {
                     printf("║ ░░░ ");
+                }
+                else if (v == 11 && i%2 == 0)
+                {
+                    printf("║  %d",ligneMilieux);
                 }
                 else
                 {
@@ -258,13 +281,19 @@ void grilleBatailleNavale() {
     }
     printf("╝");
     //demande les coordonnées
-    printf("\n\nPremière coordonnée : ");
+    printf("\n\nPremière coordonnée (A-J) : ");
     fflush(stdin);
-    scanf("%d", &coordonneeX);
-    printf("\nDeuxième coordonnée : ");
+    scanf("%c", &coordonneeX);
+    printf("\nDeuxième coordonnée (1-10) : ");
     fflush(stdin);
     scanf("%d", &coordonneeY);
 
+    if (coordonneeX == VALEUR_Z && coordonneeY == 0)
+    {
+        return;
+    }
+    //On soustrait par 65 car la valeur de A est de 65 en numérique
+    coordonneeX = coordonneeX - 64;
     //vérifie les coordonnées si il est valide et/ou si il touche un bateau
     aireDeJeux[10][10] = verificationDesCoordonnees(coordonneeX, coordonneeY, aireDeJeux);
     }
