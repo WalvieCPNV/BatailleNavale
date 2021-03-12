@@ -41,6 +41,16 @@ const int grille[10][10] = {{0, 0, 2, 2, 2, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 3, 3, 3, 0, 0, 0, 0},
                             {0, 4, 4, 4, 4, 0, 0, 0, 0, 0}};
+
+
+/**
+ * éfface tout ce qui est sur l'écran
+ */
+void resetEcran()
+{
+    system("cls");
+}
+
 /**
  * Le menu principale du jeu
  */
@@ -76,7 +86,7 @@ void menu()
  */
 void affichageGagner()
 {
-    system("cls");
+    resetEcran();
     printf("Vous avez gagner !!!!!!!!!\n\n\n");
     system("pause");
 }
@@ -88,10 +98,10 @@ int conditionGagner(int aireDeJeux[10][10])
 {
     //initialization des variables
     int bateau_1 = 0,
-            bateau_2 = 0,
-            bateau_3 = 0,
-            bateau_4 = 0,
-            bateau_5 = 0;
+        bateau_2 = 0,
+        bateau_3 = 0,
+        bateau_4 = 0,
+        bateau_5 = 0;
 
     for (int colonneA = 0; colonneA < 10; ++colonneA)
     {
@@ -183,6 +193,15 @@ int verificationDesCoordonnees(char coordonneeX,int coordonneeY,int aireDeJeux[1
 }
 
 /**
+ * affichage des légendes sur la grille
+ */
+void legende()
+{
+    printf("▓ == Touché\n\n");
+    printf("░ == à l'eau\n\n");
+    printf("Coordonnée Z:0 == quitter\n\n");
+}
+/**
  * affiche la grille pour la bataille navale
  */
 void grilleBatailleNavale() {
@@ -206,12 +225,10 @@ void grilleBatailleNavale() {
     //continue en boucle la bataille navale jusqu'à ce que le joueur a touché tout les bateaux
     do
     {
-        system("cls");
+        resetEcran();
         printf("\n================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n");
-        printf("▓ == Touché\n\n");
-        printf("░ == à l'eau\n\n");
-        printf("Coordonnée Z:0 == quitter\n\n");
         //Légende
+        legende();
         for (int legende = 0; legende < 10; ++legende)
         {
             printf("   %c  ",65 + legende);
@@ -307,7 +324,7 @@ void grilleBatailleNavale() {
  */
 void affichageDaide()
 {
-    system("cls");
+    resetEcran();
     printf("================================== ~~~~~  Aide du jeux  ~~~~~ ==================================\n\n\n\n");
     printf("\nLe but du jeux est de coulé tout les bateaux sur la grille.\n\n");
     printf("Mettez les coordonnées x et y pour envoyé un missile sur cette case.\n\n");
@@ -341,14 +358,6 @@ void affichagedaccent()
 }
 
 /**
- * éfface tout ce qui est sur l'écran
- */
-void resetEcran()
-{
-    system("cls");
-}
-
-/**
  * demande le choix du menu
  * @param choix
  * @return
@@ -367,6 +376,7 @@ int main(void)
     //prendant que l'utilisateur ne choisi pas l'option "quiter" le programme continue
     do
     {
+        //efface
         resetEcran();
         //affichage du menu
         menu();
