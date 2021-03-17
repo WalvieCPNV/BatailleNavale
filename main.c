@@ -41,7 +41,8 @@ const int grille[10][10] = {{0, 0, 2, 2, 2, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                             {0, 0, 0, 3, 3, 3, 0, 0, 0, 0},
                             {0, 4, 4, 4, 4, 0, 0, 0, 0, 0}};
-
+//utilisé pour garder en compte le score du joueur pendant qu'il joue
+int scoreJeux = 0;
 
 /**
  * éfface tout ce qui est sur l'écran
@@ -78,9 +79,39 @@ void menu()
            "                          \".,.\"~`~\n\n");
     printf("---- 1: Jouer\n\n");
     printf("---- 2: Aide\n\n");
-    printf("---- 3: Quiter\n\n");
+    printf("---- 3: Score\n\n");
+    printf("---- 4: Authentification\n\n");
+    printf("---- 5: Quiter\n\n");
 }
 
+/**
+ * lis un fichier qui à des scores enregister à l'intérieurs et les affiches avec l'utilisateur qui a fait le score
+ */
+ void score()
+ {
+     resetEcran();
+     char lettre;
+     FILE *fp;
+     //mode l'écture
+     fp = fopen("BD/score.txt", "r");
+
+     if (fp == NULL)
+     {
+         printf("Une erreur est survenue lors de l'ouverture du fichier\n");
+         system("pause");
+         return;
+     }
+     do
+     {
+         lettre = fgetc(fp);
+         printf("%d\n",lettre);
+         printf("%c\n", lettre);
+     }while (lettre != EOF);
+
+     printf("\n");
+     fclose(fp);
+     system("pause");
+ }
 /**
  * affiche l'écran de victoire
  */
@@ -88,6 +119,7 @@ void affichageGagner()
 {
     resetEcran();
     printf("Vous avez gagner !!!!!!!!!\n\n\n");
+    printf("Score total: %d\n\n",scoreJeux);
     system("pause");
 }
 
@@ -154,6 +186,7 @@ int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
     if (grille[coordonneeY-1][coordonneeX-1] > 0)
     {
         aireDeJeux[coordonneeY-1][coordonneeX-1] = 2;
+        scoreJeux = scoreJeux + 100;
         printf("\n\nToucher ^^\n");
         aireDeJeux[10][10] = conditionGagner(aireDeJeux);
         system("pause");
@@ -161,6 +194,7 @@ int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
     else
     {
         aireDeJeux[coordonneeY-1][coordonneeX-1] = 1;
+        scoreJeux = scoreJeux - 10;
         printf("\n\nPlouf ^^\n");
         system("pause");
     }
@@ -345,6 +379,9 @@ void changementDesMenus(int choix)
             affichageDaide();
             break;
         case 3:
+            score();
+            break;
+        case 5:
             return;
     }
 }
@@ -385,6 +422,6 @@ int main(void)
         //change d'écran selon le choix de l'utilisateur
         changementDesMenus(choix);
     }
-    while (choix != 3);
+    while (choix != 5);
     return 0;
 }
