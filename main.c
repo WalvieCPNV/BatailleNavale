@@ -85,6 +85,28 @@ void menu()
 }
 
 /**
+ * enregistrement du score d'un utilisateur dans un fichier
+ */
+void enregistrementScore()
+{
+    char dataDuScore[50];
+    FILE * fp;
+    fp = fopen("BD/score.txt", "a");
+    //assossie le texte avec le nombre du score
+    sprintf(dataDuScore,"\nnom                    %d",scoreJeux);
+    //affiche une erreur si le fichier n'a pas été touvé
+    if (fp == NULL)
+    {
+        printf("\nUne erreur est survenue lors de l'ouverture du fichier\n");
+        system("pause");
+        return;
+    }
+    //ajoute la donnée dans le fichier
+    fputs(dataDuScore,fp);
+    fclose(fp);
+}
+
+/**
  * lis un fichier qui à des scores enregister à l'intérieurs et les affiches avec l'utilisateur qui a fait le score
  */
  void score()
@@ -104,8 +126,7 @@ void menu()
      do
      {
          lettre = fgetc(fp);
-         printf("%d\n",lettre);
-         printf("%c\n", lettre);
+         printf("%c", lettre);
      }while (lettre != EOF);
 
      printf("\n");
@@ -120,6 +141,7 @@ void affichageGagner()
     resetEcran();
     printf("Vous avez gagner !!!!!!!!!\n\n\n");
     printf("Score total: %d\n\n",scoreJeux);
+    enregistrementScore();
     system("pause");
 }
 
@@ -255,7 +277,8 @@ void grilleBatailleNavale() {
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-
+    //rénitialise le score au début d'une nouvelle partie
+    scoreJeux = 0;
     //continue en boucle la bataille navale jusqu'à ce que le joueur a touché tout les bateaux
     do
     {
