@@ -30,6 +30,7 @@
 #include <windows.h>
 
 #define VALEUR_Z 90
+#define ESPACE " "
 
 const int grille[10][10] = {{0, 0, 2, 2, 2, 0, 0, 0, 0, 0},
                             {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -93,7 +94,7 @@ void enregistrementScore()
     FILE * fp;
     fp = fopen("BD/score.txt", "a");
     //assossie le texte avec le nombre du score
-    sprintf(dataDuScore,"\nnom                    %d",scoreJeux);
+    sprintf(dataDuScore,"\n%24cnom%49c%d",ESPACE,ESPACE,scoreJeux);
     //affiche une erreur si le fichier n'a pas été touvé
     if (fp == NULL)
     {
@@ -104,6 +105,30 @@ void enregistrementScore()
     //ajoute la donnée dans le fichier
     fputs(dataDuScore,fp);
     fclose(fp);
+}
+
+/**
+ * Affiche l'écran du score sans les scores
+ */
+void affichageEcranScore()
+{
+    //faire 20 espace avant d'écrire le titre
+    printf("\n\n%49cScore\n\n",ESPACE);
+    //faire que la moitié des "-" ce trouve au milieu du titre
+    for (int i = 0; i < 98; ++i)
+    {
+        printf("-");
+    }
+    printf("\n%24cNom:%49cScore:\n\n",ESPACE,ESPACE);
+}
+
+/**
+ * Affiche le score des joueurs
+ * @param lettre
+ */
+void affichageScore(char lettre)
+{
+    printf("%c",lettre);
 }
 
 /**
@@ -123,10 +148,11 @@ void enregistrementScore()
          system("pause");
          return;
      }
+     affichageEcranScore();
      do
      {
          lettre = fgetc(fp);
-         printf("%c", lettre);
+         affichageScore(lettre);
      }while (lettre != EOF);
 
      printf("\n");
