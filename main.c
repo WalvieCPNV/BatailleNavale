@@ -30,18 +30,21 @@
 #include <windows.h>
 
 #define VALEUR_Z 90
-#define ESPACE " "
+#define ESPACE 32
 
-const int grille[10][10] = {{0, 0, 2, 2, 2, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 5, 5, 5, 5, 5, 1, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 1, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                            {0, 0, 0, 3, 3, 3, 0, 0, 0, 0},
-                            {0, 4, 4, 4, 4, 0, 0, 0, 0, 0}};
+const int grille[10][10] = {
+        {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
+        {0, 4, 4, 4, 4, 0, 0, 0, 5, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
+        {0, 0, 0, 0, 0, 0, 2, 0, 5, 0},
+        {0, 0, 0, 0, 0, 0, 2, 0, 0, 0},
+        {0, 3, 3, 3, 0, 0, 2, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+};
+
 //utilisé pour garder en compte le score du joueur pendant qu'il joue
 int scoreJeux = 0;
 
@@ -86,15 +89,41 @@ void menu()
 }
 
 /**
+ * prend un fichier et l'inscrit dans une varialbe
+ */
+int recupereGrille()
+{
+    int grille[10][10];
+    FILE * fp;
+    fp = fopen("BD/Grille/1.txt", "r");
+
+    if (fp == NULL)
+    {
+        printf("\nUne erreur est survenue lors de l'ouverture du fichier\n");
+        system("pause");
+        return NULL;
+    }
+    for (int i = 0; i < 10; ++i)
+    {
+        for (int j = 0; j < 10; ++j)
+        {
+            fscanf(fp,"%d",&grille[i][j]);
+        }
+    }
+    fclose(fp);
+    return grille[10][10];
+}
+
+/**
  * enregistrement du score d'un utilisateur dans un fichier
  */
 void enregistrementScore()
 {
-    char dataDuScore[50];
+    char dataDuScore[150];
     FILE * fp;
     fp = fopen("BD/score.txt", "a");
     //assossie le texte avec le nombre du score
-    sprintf(dataDuScore,"\n%24cnom%49c%d",ESPACE,ESPACE,scoreJeux);
+    sprintf(dataDuScore,"\n%24cnom%50c%d",ESPACE,ESPACE,scoreJeux);
     //affiche une erreur si le fichier n'a pas été touvé
     if (fp == NULL)
     {
@@ -213,7 +242,7 @@ int conditionGagner(int aireDeJeux[10][10])
             }
         }
     }
-    //si tout les compteurs de bateaux sont égales a la valeur correcte, ça veux dire que tout les bateaux ont été touché
+    //si tout les compteurs de bateaux sont égales a la valeur correcte, ça veux dire que tout les bateaux ont été coulé
     if (bateau_1 == 2 && bateau_2 == 3 && bateau_3 == 3 && bateau_4 == 4 && bateau_5 == 5)
     {
         //cette valeur est utilisé si le joueur a gagner
@@ -234,9 +263,9 @@ int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
     if (grille[coordonneeY-1][coordonneeX-1] > 0)
     {
         aireDeJeux[coordonneeY-1][coordonneeX-1] = 2;
+        aireDeJeux[10][10] = conditionGagner(aireDeJeux);
         scoreJeux = scoreJeux + 100;
         printf("\n\nToucher ^^\n");
-        aireDeJeux[10][10] = conditionGagner(aireDeJeux);
         system("pause");
     }
     else
@@ -269,6 +298,11 @@ int verificationDesCoordonnees(char coordonneeX,int coordonneeY,int aireDeJeux[1
     }
     else
     {
+        //int grille[][] = recupereGrille();
+        //if (grille == NULL)
+        //{
+        //    return;
+        //}
         aireDeJeux[10][10] = bateauToucher(coordonneeX,coordonneeY,aireDeJeux);
     }
     return aireDeJeux;
@@ -283,6 +317,31 @@ void legende()
     printf("░ == à l'eau\n\n");
     printf("Coordonnée Z:0 == quitter\n\n");
 }
+
+/**
+ * prends la coordonnée X de l'utilisateur
+ */
+char entreeCoordonneeX()
+{
+    int coordonneeX;
+    printf("\n\nPremière coordonnée (A-J) : ");
+    fflush(stdin);
+    scanf("%c", &coordonneeX);
+    return coordonneeX;
+}
+
+/**
+ * prends la coordonnée Y de l'utilisateur
+ */
+int entreeCoordonneeY()
+{
+    int coordonneeY;
+    printf("\nDeuxième coordonnée (1-10) : ");
+    fflush(stdin);
+    scanf("%d", &coordonneeY);
+    return coordonneeY;
+}
+
 /**
  * affiche la grille pour la bataille navale
  */
@@ -309,6 +368,7 @@ void grilleBatailleNavale() {
     do
     {
         resetEcran();
+        recupereGrille();
         printf("\n================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n");
         //Légende
         legende();
@@ -380,13 +440,9 @@ void grilleBatailleNavale() {
             }
         }
         printf("╝");
-        //demande les coordonnées
-        printf("\n\nPremière coordonnée (A-J) : ");
-        fflush(stdin);
-        scanf("%c", &coordonneeX);
-        printf("\nDeuxième coordonnée (1-10) : ");
-        fflush(stdin);
-        scanf("%d", &coordonneeY);
+
+        coordonneeX = entreeCoordonneeX();
+        coordonneeY = entreeCoordonneeY();
 
         if (coordonneeX == VALEUR_Z && coordonneeY == 0)
         {
