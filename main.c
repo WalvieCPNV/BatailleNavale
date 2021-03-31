@@ -28,6 +28,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <string.h>
 
 #define VALEUR_Z 90
 #define ESPACE 32
@@ -47,6 +48,7 @@ const int grille[10][10] = {
 
 //utilisé pour garder en compte le score du joueur pendant qu'il joue
 int scoreJeux = 0;
+char nom[3];
 
 /**
  * éfface tout ce qui est sur l'écran
@@ -61,31 +63,18 @@ void resetEcran()
  */
 void menu()
 {
-    printf("================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n                    ()\n"
-           "                    ||q',,'\n"
-           "                    ||d,~\n"
-           "         (,---------------------,)\n"
-           "          ',       q888p       ,'\n"
-           "            \\       986       /\n"
-           "             \\  8p, d8b ,q8  /\n"
-           "              ) 888a888a888 (\n"
-           "             /  8b` q8p `d8  \\              O\n"
-           "            /       689       \\             |','\n"
-           "           /       d888b       \\      (,---------,)\n"
-           "         ,'_____________________',     \\   ,8,   /\n"
-           "         (`__________L|_________`)      ) a888a (    _,_\n"
-           "         [___________|___________]     /___`8`___\\   }*{\n"
-           "           }:::|:::::}::|::::::{      (,=========,)  -=-\n"
-           "            '|::::}::|:::::{:|'  .,.    \\:::|:::/    ~`~=\n"
-           " --=~(@)~=-- '|}:::::|::{:::|'          ~\".,.\"~`~\n"
-           "               '|:}::|::::|'~`~\".,.\"\n"
-           "           ~`~\".,.\"~`~\".,                 \"~`~\".,.\"~\n"
-           "                          \".,.\"~`~\n\n");
-    printf("---- 1: Jouer\n\n");
-    printf("---- 2: Aide\n\n");
-    printf("---- 3: Score\n\n");
-    printf("---- 4: Authentification\n\n");
-    printf("---- 5: Quiter\n\n");
+    //faire 20 espace avant d'écrire le titre
+    printf("\n\n%39cBataille Navale\n\n",ESPACE);
+    //faire que la moitié des "-" ce trouve au milieu du titre
+    for (int i = 0; i < 98; ++i)
+    {
+        printf("-");
+    }
+    printf("\n\nJouer: 1\n");
+    printf("Aide: 2\n");
+    printf("Score: 3\n");
+    printf("Authentification: 4\n");
+    printf("Quiter: 5\n\n");
 }
 
 /**
@@ -123,7 +112,7 @@ void enregistrementScore()
     FILE * fp;
     fp = fopen("BD/score.txt", "a");
     //assossie le texte avec le nombre du score
-    sprintf(dataDuScore,"\n%24cnom%50c%d",ESPACE,ESPACE,scoreJeux);
+    sprintf(dataDuScore,"\n%27s%50c%d",nom,ESPACE,scoreJeux);
     //affiche une erreur si le fichier n'a pas été touvé
     if (fp == NULL)
     {
@@ -158,6 +147,58 @@ void affichageEcranScore()
 void affichageScore(char lettre)
 {
     printf("%c",lettre);
+}
+
+/**
+ * verifie si les conditions pour le nom est correcte
+ * @return
+ */
+int verificationAuthentification()
+{
+    while (strlen(nom) != 3)
+    {
+        system("cls");
+        //faire 40 espace avant d'écrire le titre
+        printf("\n\n%39cAuthentification\n\n",ESPACE);
+        //faire que la moitié des "-" ce trouve au milieu du titre
+        for (int i = 0; i < 98; ++i)
+        {
+            printf("-");
+        }
+        printf("\n\nLe nom d'utilisateur doit être exactement 3 character\n");
+        system("pause");
+        return 0;
+    }
+    return 1;
+}
+/**
+ * enregistre le nom de l'utilisateur
+ */
+int nomAuthentification()
+{
+    scanf("%s",&nom);
+    fflush(stdin);
+    return verificationAuthentification();
+}
+/**
+ * affiche le menu de l'authentification
+ */
+void authentification()
+{
+    int valide;
+    while (valide != 1)
+    {
+        system("cls");
+        //faire 40 espace avant d'écrire le titre
+        printf("\n\n%44cAuthentification\n\n",ESPACE);
+        //faire que la moitié des "-" ce trouve au milieu du titre
+        for (int i = 0; i < 98; ++i)
+        {
+            printf("-");
+        }
+        printf("\n%24cNom:%49c",ESPACE,ESPACE);
+        valide = nomAuthentification();
+    }
 }
 
 /**
@@ -485,6 +526,9 @@ void changementDesMenus(int choix)
             break;
         case 3:
             score();
+            break;
+        case 4:
+            authentification();
             break;
         case 5:
             return;
