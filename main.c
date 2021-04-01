@@ -126,30 +126,120 @@ void menu()
 /**
  * récupère la date exacte quand cette fonction est appeler
  */
-void date()
+int date()
 {
     //time_t est un type de variable
     time_t t = time(NULL);
     //on assotie la structure de localtime dans la variable t
     struct tm tm = *localtime(&t);
-    printf("now: %d.%02d.%02d %02d:%02d\n",  tm.tm_mday, tm.tm_mon + 1,tm.tm_year + 1900, tm.tm_hour, tm.tm_min);
+    //on mets les valeurs de la date dans une table pour pouvoir plus facilement les retournées
+    int dateEtHeure[] = {tm.tm_mday, tm.tm_mon + 1,tm.tm_year + 1900, tm.tm_hour, tm.tm_min};
+    return dateEtHeure;
 }
 
 /**
  * enregistre dans un fichier les évènement important qui ce sont passer pendant l'éxécution du programme
  */
-void enregistrementDesLogs()
+void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
 {
-    char dataDuLog[50];
+    char dataDuLog[150];
+    int *dateEtHeure;
+    //ouvre le fichier des logs
     FILE *logs;
     logs = fopen("BD/logs.txt","a");
-
+    //affiche une erreur si il ne trouve pas le fichier
     if (logs == NULL)
     {
         printf("\nUne erreur est survenue lors de l'ouverture du fichier\n");
         pause();
     }
-
+    //insertion des valeurs de date et heures dans la table
+    dateEtHeure = date();
+    //il y a deux switch pour une version du log qui à le nom de l'utilisateur et une autre sans l'utilisateur
+    if (strlen(nom) == 3)
+    {
+        switch (typeDevenement)
+        {
+            //le joueur commence une partie
+            case 1:
+                sprintf(dataDuLog,"%s à commencer une partie le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            //le joueur a tirer
+            case 2:
+                sprintf(dataDuLog,"%s à tirer sur %c;%d le %d.%d.%d %d:%d\n\n",nom, argument1, argument2, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            //le joueur a gagner la partie
+            case 3:
+                sprintf(dataDuLog,"%s à gagner avec un score de %d le %d.%d.%d %d:%d\n\n",nom, argument1, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            //appelle la fonction pour l'aide
+            case 4:
+                sprintf(dataDuLog,"%s à afficher l'aide le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            //le joueur appelle la fonction score
+            case 5:
+                sprintf(dataDuLog,"%s à afficher les scores le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            //le joueur c'est authentifier
+            case 6:
+                sprintf(dataDuLog,"L'utilisateur c'est nommé %s le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            case 7:
+                sprintf(dataDuLog,"%s à fermer le programme le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            case 8:
+                sprintf(dataDuLog,"%s à quitter la partie le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+        }
+    }
+    else
+    {
+        switch (typeDevenement)
+        {
+            //le joueur commence une partie
+            case 1:
+                sprintf(dataDuLog,"Anonyme à commencer une partie le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+                //le joueur a tirer
+            case 2:
+                sprintf(dataDuLog,"Anonyme à tirer sur %d;%d le %d.%d.%d %d:%d\n\n", argument1, argument2, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+                //le joueur a gagner la partie
+            case 3:
+                sprintf(dataDuLog,"Anonyme à gagner avec un score de %d le %d.%d.%d %d:%d\n\n", argument1, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+                //appelle la fonction pour l'aide
+            case 4:
+                sprintf(dataDuLog,"Anonyme à afficher l'aide le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+                //le joueur appelle la fonction score
+            case 5:
+                sprintf(dataDuLog,"Anonyme à afficher les scores le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            case 7:
+                sprintf(dataDuLog,"Anonyme à fermer le programme le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+            case 8:
+                sprintf(dataDuLog,"Anonyme à quitter la partie le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                fputs(dataDuLog,logs);
+                break;
+        }
+    }
+    fclose(logs);
 }
 
 /**
@@ -214,6 +304,7 @@ void affichageEcranScore()
  */
 void ecranDemandeDauthentification()
 {
+    effacerEcran();
     afficherLegende(4);
     printf("\n\nVeuiller vous authentifier avant de commencer une partie.");
     pause();
@@ -242,6 +333,8 @@ int verificationAuthentification()
         pause();
         return 0;
     }
+    //enregistre cette évènement dans le log
+    enregistrementDesLogs(6,NULL,NULL);
     return 1;
 }
 /**
@@ -273,6 +366,8 @@ void authentification()
  */
  void score()
  {
+     //enregistre cette évènement dans le log
+     enregistrementDesLogs(5,NULL,NULL);
      effacerEcran();
      char lettre;
      FILE *fp;
@@ -302,6 +397,8 @@ void authentification()
  */
 void affichageGagner()
 {
+    //enregistre cette évènement dans le log
+    enregistrementDesLogs(3,scoreJeux,NULL);
     effacerEcran();
     printf("Vous avez gagner !!!!!!!!!\n\n\n");
     printf("Score total: %d\n\n",scoreJeux);
@@ -412,6 +509,8 @@ int verificationDesCoordonnees(char coordonneeX,int coordonneeY,int aireDeJeux[1
         //{
         //    return;
         //}
+        //enregistre l'évènement du tire dans le log
+        enregistrementDesLogs(2,coordonneeX,coordonneeY);
         aireDeJeux[10][10] = bateauToucher(coordonneeX,coordonneeY,aireDeJeux);
     }
     return aireDeJeux;
@@ -459,6 +558,8 @@ void grilleBatailleNavale() {
     //déclaration de variable
     char coordonneeX;
     int coordonneeY;
+    //enregistre cette évènement dans le log
+    enregistrementDesLogs(1,NULL,NULL);
     /**
      * sert a définir ou le joueur a déjà tirer, 0 = pas tirer dessus, 1 = à l'eau, 2 = bateau touché
      */
@@ -553,9 +654,10 @@ void grilleBatailleNavale() {
 
         coordonneeX = entreeCoordonneeX();
         coordonneeY = entreeCoordonneeY();
-
         if (coordonneeX == VALEUR_Z && coordonneeY == 0)
         {
+            //enregistre l'évènement de quitter la partie dans le log
+            enregistrementDesLogs(8, (int) NULL, (int) NULL);
             return;
         }
         //On soustrait par 65 car la valeur de A est de 65 en numérique
@@ -574,6 +676,7 @@ void grilleBatailleNavale() {
 void affichageDaide()
 {
     effacerEcran();
+    enregistrementDesLogs(4,NULL,NULL);
     afficherLegende(2);
     printf("\n\nLe but du jeux est de coulé tout les bateaux sur la grille.\n\n");
     printf("Mettez les coordonnées x et y pour envoyé un missile sur cette case.\n\n");
@@ -588,7 +691,7 @@ void changementDesMenus(int choix)
     {
         case 1:
             //Si le joueur c'est authentifier, il peux commencer une partie, sinon il ne peux pas
-            if (nom == NULL)
+            if (strlen(nom) != 3)
             {
                 ecranDemandeDauthentification();
             }
@@ -608,6 +711,8 @@ void changementDesMenus(int choix)
             authentification();
             break;
         case 5:
+            //enregistre cette évènement dans le log
+            enregistrementDesLogs(7,NULL,NULL);
             return;
     }
 }
