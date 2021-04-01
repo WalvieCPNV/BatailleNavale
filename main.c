@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <windows.h>
 #include <string.h>
+#include <time.h>
 
 #define VALEUR_Z 90
 #define ESPACE 32
@@ -120,6 +121,35 @@ void menu()
     printf("Score: 3\n");
     printf("Authentification: 4\n");
     printf("Quiter: 5\n\n");
+}
+
+/**
+ * récupère la date exacte quand cette fonction est appeler
+ */
+void date()
+{
+    //time_t est un type de variable
+    time_t t = time(NULL);
+    //on assotie la structure de localtime dans la variable t
+    struct tm tm = *localtime(&t);
+    printf("now: %d.%02d.%02d %02d:%02d\n",  tm.tm_mday, tm.tm_mon + 1,tm.tm_year + 1900, tm.tm_hour, tm.tm_min);
+}
+
+/**
+ * enregistre dans un fichier les évènement important qui ce sont passer pendant l'éxécution du programme
+ */
+void enregistrementDesLogs()
+{
+    char dataDuLog[50];
+    FILE *logs;
+    logs = fopen("BD/logs.txt","a");
+
+    if (logs == NULL)
+    {
+        printf("\nUne erreur est survenue lors de l'ouverture du fichier\n");
+        pause();
+    }
+
 }
 
 /**
@@ -266,6 +296,7 @@ void authentification()
      fclose(fp);
      pause();
  }
+
 /**
  * affiche l'écran de victoire
  */
@@ -393,6 +424,7 @@ void legende()
 {
     printf("\n\n▓ == Touché\n\n");
     printf("░ == à l'eau\n\n");
+    date();
     printf("Coordonnée Z:0 == quitter\n\n");
 }
 
