@@ -1,30 +1,10 @@
 /**
  * Auteur: Arthur Bottemanne
  * Projet: Bataille Navale
- * Date: 19.02.21
- * Version: 0.1v
- *
-                    ()
-                    ||q',,'
-                    ||d,~
-         (,---------------------,)
-          ',       q888p       ,'
-            \       986       /
-             \  8p, d8b ,q8  /
-              ) 888a888a888 (
-             /  8b` q8p `d8  \              O
-            /       689       \             |','
-           /       d888b       \      (,---------,)
-         ,'_____________________',     \   ,8,   /
-         (`__________L|_________`)      ) a888a (    _,_
-         [___________|___________]     /___`8`___\   }*{
-           }:::|:::::}::|::::::{      (,=========,)  -=-
-            '|::::}::|:::::{:|'  .,.    \:::|:::/    ~`~=
- --=~(@)~=-- '|}:::::|::{:::|'          ~".,."~`~
-               '|:}::|::::|'~`~".,."
-           ~`~".,."~`~".,                 "~`~".,."~
-                          ".,."~`~
+ * Date: 01.04.2021
+ * Version: 1.0v
  */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
@@ -35,29 +15,13 @@
 #define ESPACE 32
 #define DECALAGE 48
 
-/**
- *
-const int grille[10][10] = {
-        {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-        {0, 4, 4, 4, 4, 0, 0, 0, 5, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
-        {0, 0, 0, 0, 0, 0, 2, 0, 5, 0},
-        {0, 0, 0, 0, 0, 0, 2, 0, 0, 0},
-        {0, 3, 3, 3, 0, 0, 2, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-        {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-};
- */
-
 //utilisé pour garder en compte le score du joueur pendant qu'il joue
 int scoreJeux = 0;
 char nom[3];
 char grille[10][10];
 
 /**
- * éfface tout ce qui est sur l'écran
+ * efface tout ce qui est sur l'écran
  */
 void effacerEcran()
 {
@@ -65,7 +29,7 @@ void effacerEcran()
 }
 
 /**
- * mets en pause le programme
+ * met en pause le programme
  */
 void pause()
 {
@@ -78,36 +42,36 @@ void afficherLegende(int nombreDuChoix)
     {
         //L'écran de l'aide
         case 2:
-            //faire 48 espace avant d'écrire le titre
+            //faire 48 espaces avant d'écrire le titre
             printf("\n\n%47cAide\n\n",ESPACE);
-            //faire que la moitié des "-" ce trouve au milieu du titre
+            //faire que la moitié des "-" se trouve au milieu du titre
             for (int i = 0; i < 98; ++i)
             {
                 printf("-");
             }
             break;
         case 3:
-            //faire 48 espace avant d'écrire le titre
+            //faire 48 espaces avant d'écrire le titre
             printf("\n\n%47cScore\n\n",ESPACE);
-            //faire que la moitié des "-" ce trouve au milieu du titre
+            //faire que la moitié des "-" se trouve au milieu du titre
             for (int i = 0; i < 98; ++i)
             {
                 printf("-");
             }
             break;
         case 4:
-            //faire 44 espace avant d'écrire le titre
+            //faire 44 espaces avant d'écrire le titre
             printf("\n\n%43cAuthentification\n\n",ESPACE);
-            //faire que la moitié des "-" ce trouve au milieu du titre
+            //faire que la moitié des "-" se trouve au milieu du titre
             for (int i = 0; i < 98; ++i)
             {
                 printf("-");
             }
             break;
         default:
-            //faire 45 espace avant d'écrire le titre
+            //faire 45 espaces avant d'écrire le titre
             printf("\n\n%44cBataille Navale\n\n",ESPACE);
-            //faire que la moitié des "-" ce trouve au milieu du titre
+            //faire que la moitié des "-" se trouve au milieu du titre
             for (int i = 0; i < 98; ++i)
             {
                 printf("-");
@@ -116,7 +80,7 @@ void afficherLegende(int nombreDuChoix)
 
 }
 /**
- * Le menu principale du jeu
+ * Le menu principal du jeu
  */
 void menu()
 {
@@ -129,21 +93,21 @@ void menu()
 }
 
 /**
- * récupère la date exacte quand cette fonction est appeler
+ * récupère la date exacte quand cette fonction est appelée
  */
 int date()
 {
     //time_t est un type de variable
     time_t t = time(NULL);
-    //on assotie la structure de localtime dans la variable t
+    //on associe la structure de localtime dans la variable t
     struct tm tm = *localtime(&t);
-    //on mets les valeurs de la date dans une table pour pouvoir plus facilement les retournées
+    //on met les valeurs de la date dans une table pour pouvoir plus facilement les retourner
     int dateEtHeure[] = {tm.tm_mday, tm.tm_mon + 1,tm.tm_year + 1900, tm.tm_hour, tm.tm_min};
     return (int) dateEtHeure;
 }
 
 /**
- * enregistre dans un fichier les évènement important qui ce sont passer pendant l'éxécution du programme
+ * enregistre dans un fichier les évènements importants qui se sont passés pendant l'exécution du programme
  */
 void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
 {
@@ -152,57 +116,57 @@ void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
     //ouvre le fichier des logs
     FILE *logs;
     logs = fopen("BD/logs.txt","a");
-    //affiche une erreur si il ne trouve pas le fichier
+    //affiche une erreur s'il ne trouve pas le fichier
     if (logs == NULL)
     {
         printf("\nUne erreur est survenue lors de l'ouverture du fichier\n");
         pause();
     }
-    //insertion des valeurs de date et heures dans la table
+    //insertion des valeurs de date et heure dans la table
     dateEtHeure = (int *) date();
-    //il y a deux switch pour une version du log qui à le nom de l'utilisateur et une autre sans l'utilisateur
+    //il y a deux switch pour une version du log qui a le nom de l'utilisateur et une autre sans l'utilisateur
     if (strlen(nom) == 3)
     {
         switch (typeDevenement)
         {
-            //le joueur commence une partie
+            //le joueur a commencé une partie
             case 1:
-                sprintf(dataDuLog,"%s à commencer une partie le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"%s a commencé une partie le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur a tirer
+            //le joueur a tiré
             case 2:
-                sprintf(dataDuLog,"%s à tirer sur %c;%d le %d.%d.%d %d:%d\n\n",nom, argument1, argument2, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"%s a tiré sur %c;%d le %d.%d.%d %d:%d\n\n",nom, argument1, argument2, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur a gagner la partie
+            //le joueur a gagné la partie
             case 3:
-                sprintf(dataDuLog,"%s à gagner avec un score de %d le %d.%d.%d %d:%d\n\n",nom, argument1, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"%s a gagné avec un score de %d le %d.%d.%d %d:%d\n\n",nom, argument1, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
             //appelle la fonction pour l'aide
             case 4:
-                sprintf(dataDuLog,"%s à afficher l'aide le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"%s a affiché l'aide le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
             //le joueur appelle la fonction score
             case 5:
-                sprintf(dataDuLog,"%s à afficher les scores le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"%s a affiché les scores le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur c'est authentifier
+            //le joueur s'est authentifié
             case 6:
-                sprintf(dataDuLog,"L'utilisateur c'est nommé %s le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"L'utilisateur s'est nommé %s le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur a quitter le programme
+            //le joueur a quitté le programme
             case 7:
-                sprintf(dataDuLog,"%s à fermer le programme le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"%s a fermé le programme le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur a quitter la partie
+            //le joueur a quitté la partie
             case 8:
-                sprintf(dataDuLog,"%s à quitter la partie le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"%s a quitté la partie le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
         }
@@ -211,39 +175,39 @@ void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
     {
         switch (typeDevenement)
         {
-            //le joueur commence une partie
+            //le joueur a commencé une partie
             case 1:
-                sprintf(dataDuLog,"Anonyme à commencer une partie le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"Anonyme a commencé une partie le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur a tirer
+            //le joueur a tiré
             case 2:
-                sprintf(dataDuLog,"Anonyme à tirer sur %d;%d le %d.%d.%d %d:%d\n\n", argument1, argument2, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"Anonyme a tiré sur %d;%d le %d.%d.%d %d:%d\n\n", argument1, argument2, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur a gagner la partie
+            //le joueur a gagné la partie
             case 3:
-                sprintf(dataDuLog,"Anonyme à gagner avec un score de %d le %d.%d.%d %d:%d\n\n", argument1, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"Anonyme a gagné avec un score de %d le %d.%d.%d %d:%d\n\n", argument1, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
             //appelle la fonction pour l'aide
             case 4:
-                sprintf(dataDuLog,"Anonyme à afficher l'aide le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"Anonyme a affiché l'aide le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
             //le joueur appelle la fonction score
             case 5:
-                sprintf(dataDuLog,"Anonyme à afficher les scores le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"Anonyme a affiché les scores le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur a quitter le programme
+            //le joueur a quitté le programme
             case 7:
-                sprintf(dataDuLog,"Anonyme à fermer le programme le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"Anonyme a fermé le programme le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-            //le joueur a quitter la partie
+            //le joueur a quitté la partie
             case 8:
-                sprintf(dataDuLog,"Anonyme à quitter la partie le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
+                sprintf(dataDuLog,"Anonyme a quitté la partie le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
         }
@@ -252,15 +216,15 @@ void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
 }
 
 /**
- * prend un fichier et l'inscrit dans une varialbe
+ * prend un fichier et l'inscrit dans une variable
  */
 void recupereGrille()
 {
-    //déclaration et inizialisation des variables
+    //déclaration et initialisation des variables
     srand(time(NULL));
     int aleatoire = rand() % 5 + 1;
     char cheminDuFichier[50];
-    //stoque le chemin d'une grille aléatoire
+    //stocke le chemin d'une grille aléatoire
     sprintf(cheminDuFichier,"BD/Grille/%d.txt",aleatoire);
     FILE * fichierGrille;
     fichierGrille = fopen(cheminDuFichier, "r");
@@ -272,7 +236,7 @@ void recupereGrille()
         pause();
         return;
     }
-    fgets((char *) grille, 100, fichierGrille);
+    fgets((char *) grille, 101, fichierGrille);
     fclose(fichierGrille);
 }
 
@@ -284,7 +248,7 @@ void enregistrementScore()
     char dataDuScore[150];
     FILE * fp;
     fp = fopen("BD/score.txt", "a");
-    //assossie le texte avec le nombre du score
+    //associe le texte avec le nombre du score
     sprintf(dataDuScore,"\n%27s%50c%d",nom,ESPACE,scoreJeux);
     //affiche une erreur si le fichier n'a pas été touvé
     if (fp == NULL)
@@ -299,7 +263,7 @@ void enregistrementScore()
 }
 
 /**
- * Affiche l'écran du score sans les scores
+ * Affiche l'écran du score sans les valeurs des scores
  */
 void affichageEcranScore()
 {
@@ -314,7 +278,7 @@ void ecranDemandeDauthentification()
 {
     effacerEcran();
     afficherLegende(4);
-    printf("\n\nVeuiller vous authentifier avant de commencer une partie.");
+    printf("\n\nVeuillez vous authentifier avant de commencer une partie.\n\n");
     pause();
 }
 
@@ -328,7 +292,7 @@ void affichageScore(char lettre)
 }
 
 /**
- * verifie si les conditions pour le nom est correcte
+ * vérifie si les conditions pour le nom sont correctes
  * @return
  */
 int verificationAuthentification()
@@ -337,11 +301,11 @@ int verificationAuthentification()
     {
         effacerEcran();
         afficherLegende(4);
-        printf("\n\nLe nom d'utilisateur doit être exactement 3 character\n");
+        printf("\n\nLe nom d'utilisateur doit contenir exactement 3 caractères\n");
         pause();
         return 0;
     }
-    //enregistre cette évènement dans le log
+    //enregistre cet évènement dans le log
     enregistrementDesLogs(6, (int) NULL, (int) NULL);
     return 1;
 }
@@ -370,16 +334,16 @@ void authentification()
 }
 
 /**
- * lis un fichier qui à des scores enregister à l'intérieurs et les affiches avec l'utilisateur qui a fait le score
+ * lis un fichier qui a des scores enregistrés à l'intérieur et les affiche avec l'utilisateur qui a fait le score
  */
  void score()
  {
-     //enregistre cette évènement dans le log
+     //enregistre cet évènement dans le log
      enregistrementDesLogs(5, (int) NULL, (int) NULL);
      effacerEcran();
      char lettre;
      FILE *fp;
-     //mode l'écture
+     //mode lecture
      fp = fopen("BD/score.txt", "r");
 
      if (fp == NULL)
@@ -403,7 +367,7 @@ void authentification()
 /**
  * affiche l'écran de victoire
  */
-void affichageGagner()
+void affichageGagne()
 {
     //enregistre cette évènement dans le log
     enregistrementDesLogs(3, scoreJeux, (int) NULL);
@@ -415,11 +379,11 @@ void affichageGagner()
 }
 
 /**
- * vérifie si un bateau qui a été touché est coulé
+ * vérifie si les conditions de victoire sont réunis
  */
-int conditionGagner(int aireDeJeux[10][10])
+int conditionGagne(int aireDeJeux[10][10])
 {
-    //initialization des variables
+    //initialisation des variables
     int bateau_1 = 0,
         bateau_2 = 0,
         bateau_3 = 0,
@@ -430,8 +394,8 @@ int conditionGagner(int aireDeJeux[10][10])
     {
         for (int colonneB = 0; colonneB < 10; ++colonneB)
         {
-            //vérifie si un bateau a été touché et augmente le compteur pour ce bateaux
-            if (grille[colonneA][colonneB ] - DECALAGE > 0 && aireDeJeux[colonneA][colonneB] > 0)
+            //vérifie si un bateau a été touché et augmente le compteur pour ce bateau
+            if (grille[colonneA][colonneB] - DECALAGE > 0 && aireDeJeux[colonneA][colonneB] > 0)
             {
                 switch ((grille[colonneA][colonneB]) - DECALAGE)
                 {
@@ -456,28 +420,28 @@ int conditionGagner(int aireDeJeux[10][10])
             }
         }
     }
-    //si tout les compteurs de bateaux sont égales a la valeur correcte, ça veux dire que tout les bateaux ont été coulé
+    //si tous les compteurs de bateaux sont égaux à la valeur correcte, cela veut dire que tous les bateaux ont été coulés
     if (bateau_1 == 2 && bateau_2 == 3 && bateau_3 == 3 && bateau_4 == 4 && bateau_5 == 5)
     {
-        //cette valeur est utilisé si le joueur a gagner
+        //cette valeur est utilisée si le joueur a gagné
         aireDeJeux[9][9] = 100;
     }
     return (int) aireDeJeux;
 }
 
 /**
- * vérifie si le joueur a toucher un bateau ou non
+ * vérifie si le joueur a touché un bateau ou non
  * @param coordonneeX
  * @param coordonneeY
  * @param aireDeJeux
  * @return
  */
-int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
+int bateauTouche(char coordonneeX, int coordonneeY, int aireDeJeux[10][10])
 {
-    if ((grille[coordonneeY][coordonneeX] - DECALAGE) > 0)
+    if ((grille[coordonneeY-1][coordonneeX-1] - DECALAGE) > 0)
     {
         aireDeJeux[coordonneeY-1][coordonneeX-1] = 2;
-        aireDeJeux[10][10] = conditionGagner(aireDeJeux);
+        aireDeJeux[10][10] = conditionGagne(aireDeJeux);
         scoreJeux = scoreJeux + 100;
         printf("\n\nToucher ^^\n");
         pause();
@@ -493,7 +457,7 @@ int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
 }
 
 /**
- * vérifie si les coordonnées sont valide et si elle touche un bateau
+ * vérifie si les coordonnées sont valides et si elle touche un bateau
  * @param coordonneeX
  * @param coordonneeY
  * @return
@@ -502,19 +466,19 @@ int verificationDesCoordonnees(char coordonneeX,int coordonneeY,int aireDeJeux[1
 {
     if (coordonneeX < 1 || coordonneeX > 10 || coordonneeY < 1 ||coordonneeY >10)
     {
-        printf("\n\nCes coordonnée ne sont pas valide\n");
+        printf("\n\nCes coordonnées ne sont pas valides\n");
         pause();
     }
     else if (aireDeJeux[coordonneeY - 1][coordonneeX - 1] != 0)
     {
-        printf("\n\nCette case à déjà été touché\n");
+        printf("\n\nCette case a déjà été toucher\n");
         pause();
     }
     else
     {
         //enregistre l'évènement du tire dans le log
         enregistrementDesLogs(2,coordonneeX,coordonneeY);
-        aireDeJeux[10][10] = bateauToucher(coordonneeX,coordonneeY,aireDeJeux);
+        aireDeJeux[10][10] = bateauTouche(coordonneeX, coordonneeY, aireDeJeux);
     }
     return (int) aireDeJeux;
 }
@@ -531,7 +495,7 @@ void legende()
 }
 
 /**
- * prends la coordonnée X de l'utilisateur
+ * prend la coordonnée X de l'utilisateur
  */
 char entreeCoordonneeX()
 {
@@ -543,7 +507,7 @@ char entreeCoordonneeX()
 }
 
 /**
- * prends la coordonnée Y de l'utilisateur
+ * prend la coordonnée Y de l'utilisateur
  */
 int entreeCoordonneeY()
 {
@@ -558,13 +522,13 @@ int entreeCoordonneeY()
  * affiche la grille pour la bataille navale
  */
 void grilleBatailleNavale() {
-    //déclaration de variable
+    //déclaration des variables
     char coordonneeX;
     int coordonneeY;
-    //enregistre cette évènement dans le log
+    //enregistre cet évènement dans le log
     enregistrementDesLogs(1, (int) NULL, (int) NULL);
     /**
-     * sert a définir ou le joueur a déjà tirer, 0 = pas tirer dessus, 1 = à l'eau, 2 = bateau touché
+     * sert à définir où le joueur a déjà tiré, 0 veut dire qu'il n'a pas été tiré dessus, 1 veut dire à l'eau, 2 veut dire bateau touché
      */
     int aireDeJeux[10][10] = {{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -576,16 +540,16 @@ void grilleBatailleNavale() {
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
-    //rénitialise le score au début d'une nouvelle partie
+    //réinitialise le score au début d'une nouvelle partie
     scoreJeux = 0;
-    //récupère une grille au hazard, ne pas mettre dans la boucle sinon elle va reprendre une grille aléatoirement
+    //récupère une grille au hasard, ne pas mettre dans la boucle sinon elle va reprendre une grille aléatoirement à chaque fois
     recupereGrille();
-    //continue en boucle la bataille navale jusqu'à ce que le joueur a touché tout les bateaux
+    //continue en boucle la bataille navale jusqu'à ce que le joueur a touché tous les bateaux
     do
     {
         effacerEcran();
         afficherLegende(0);
-        //Légende
+        //affiche la légende
         legende();
         for (int legende = 0; legende < 10; ++legende)
         {
@@ -607,25 +571,25 @@ void grilleBatailleNavale() {
         printf("╗");
         printf("\n");
         //toutes les lignes intermédiaires de la grille
-        for (int ligneMilieux = 1; ligneMilieux <= 10; ++ligneMilieux)
+        for (int ligneMilieu = 1; ligneMilieu <= 10; ++ligneMilieu)
         {
             for (int i = 0; i < 2; ++i)
             {
                 //pour les bordures de gauche et de droite des cellules
                 for (int v = 1; v <= 11; ++v)
                 {
-                    //affiche les cellules qui ont été touché
-                    if (aireDeJeux[ligneMilieux-1][v-1] > 1 && v != 11)
+                    //affiche les cellules qui ont été touchées
+                    if (aireDeJeux[ligneMilieu - 1][v - 1] > 1 && v != 11)
                     {
                         printf("║ ▓▓▓ ");
                     }
-                    else if (aireDeJeux[ligneMilieux-1][v-1] > 0 && v != 11)
+                    else if (aireDeJeux[ligneMilieu - 1][v - 1] > 0 && v != 11)
                     {
                         printf("║ ░░░ ");
                     }
                     else if (v == 11 && i%2 == 0)
                     {
-                        printf("║  %d",ligneMilieux);
+                        printf("║  %d", ligneMilieu);
                     }
                     else
                     {
@@ -635,7 +599,7 @@ void grilleBatailleNavale() {
                 printf("\n");
             }
             //bordure du bas d'une cellule
-            if (ligneMilieux != 10) {
+            if (ligneMilieu != 10) {
                 printf("╠═════");
                 for (int v = 0; v < 9; ++v) {
                     printf("╬═════");
@@ -664,28 +628,27 @@ void grilleBatailleNavale() {
             enregistrementDesLogs(8, (int) NULL, (int) NULL);
             return;
         }
-        //On soustrait par 65 car la valeur de A est de 65 en numérique
+        //On soustrait par 64 car la valeur de A est de 64 en numérique
         coordonneeX = coordonneeX - 64;
         //vérifie les coordonnées si il est valide et/ou si il touche un bateau
         aireDeJeux[10][10] = verificationDesCoordonnees(coordonneeX, coordonneeY, aireDeJeux);
     }
-        //condition temporaire pendant que le reste du code soit complémenté
     while (aireDeJeux[9][9] != 100);
-    affichageGagner();
+    affichageGagne();
 }
 
 /**
- * affiche l'aide du jeux
+ * affiche l'aide du jeu
  */
 void affichageDaide()
 {
     effacerEcran();
     enregistrementDesLogs(4, (int) NULL, (int) NULL);
     afficherLegende(2);
-    printf("\n\nLe but du jeux est de coulé tout les bateaux sur la grille.\n\n");
-    printf("Mettez les coordonnées x et y pour envoyé un missile sur cette case.\n\n");
-    printf("vous saurez si vous avez touché un bateau par un symbol, ▓ si le missile a touché un bateau et ░ si il a loupé.\n\n");
-    printf("Utiliser le moin de missile au total pour avoir le plus de point.\n\n\n\n\n\n");
+    printf("\n\nLe but du jeu est de toucher tous les bateaux sur la grille.\n\n");
+    printf("Donnez les coordonnées x et y pour envoyer un missile sur cette case.\n\n");
+    printf("Si vous avez touché un bateau, le symbole ▓ s'affiche, si vous avez raté un bateau, le symbole ░ s'affiche.\n\n");
+    printf("Utilisez le moins de missile possible pour avoir un maximum de points.\n\n\n\n\n\n");
     pause();
 }
 
@@ -694,14 +657,14 @@ void changementDesMenus(int choix)
     switch (choix)
     {
         case 1:
-            //Si le joueur c'est authentifier, il peux commencer une partie, sinon il ne peux pas
+            //Si le joueur s'est authentifié, il peut commencé une partie, sinon il ne peut pas
             if (strlen(nom) != 3)
             {
                 ecranDemandeDauthentification();
             }
             else
             {
-                //Affiche la grille pour la bataille navale et éxecute les autres fonctions pour la bataille navale
+                //Affiche la grille pour la bataille navale et exécute les autres fonctions pour la bataille navale
                 grilleBatailleNavale();
             }
             break;
@@ -715,14 +678,14 @@ void changementDesMenus(int choix)
             authentification();
             break;
         case 5:
-            //enregistre cette évènement dans le log
+            //enregistre cet évènement dans le log
             enregistrementDesLogs(7, (int) NULL, (int) NULL);
             return;
     }
 }
 
 /**
- * Utilisé pour afficher les accents
+ * affiche les accents
  */
 void affichagedaccent()
 {
@@ -745,14 +708,13 @@ int main(void)
 {
     int choix;
     affichagedaccent();
-    //prendant que l'utilisateur ne choisi pas l'option "quiter" le programme continue
+    //pendant que l'utilisateur ne choisit pas l'option "quitter" le programme continue
     do
     {
-        //efface
         effacerEcran();
         //affichage du menu
         menu();
-        //demande le choix de l'utilisateur
+        //demande le choix à l'utilisateur
         choix = demandeDuChoix(choix);
         //change d'écran selon le choix de l'utilisateur
         changementDesMenus(choix);
