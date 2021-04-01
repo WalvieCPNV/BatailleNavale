@@ -257,6 +257,7 @@ void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
 void recupereGrille()
 {
     //déclaration et inizialisation des variables
+    srand(time(NULL));
     int aleatoire = rand() % 5 + 1;
     char cheminDuFichier[50];
     //stoque le chemin d'une grille aléatoire
@@ -583,14 +584,6 @@ void grilleBatailleNavale() {
     do
     {
         effacerEcran();
-        for (int i = 0; i < 10; ++i)
-        {
-            for (int j = 0; j < 10; ++j)
-            {
-                printf("%d",(grille[j][i])-DECALAGE);
-            }
-            printf("\n");
-        }
         afficherLegende(0);
         //Légende
         legende();
