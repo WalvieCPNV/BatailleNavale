@@ -33,7 +33,10 @@
 
 #define VALEUR_Z 90
 #define ESPACE 32
+#define DECALAGE 48
 
+/**
+ *
 const int grille[10][10] = {
         {0, 1, 1, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 5, 0},
@@ -46,10 +49,12 @@ const int grille[10][10] = {
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
         {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 };
+ */
 
 //utilisé pour garder en compte le score du joueur pendant qu'il joue
 int scoreJeux = 0;
 char nom[3];
+char grille[10][10];
 
 /**
  * éfface tout ce qui est sur l'écran
@@ -134,7 +139,7 @@ int date()
     struct tm tm = *localtime(&t);
     //on mets les valeurs de la date dans une table pour pouvoir plus facilement les retournées
     int dateEtHeure[] = {tm.tm_mday, tm.tm_mon + 1,tm.tm_year + 1900, tm.tm_hour, tm.tm_min};
-    return dateEtHeure;
+    return (int) dateEtHeure;
 }
 
 /**
@@ -154,7 +159,7 @@ void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
         pause();
     }
     //insertion des valeurs de date et heures dans la table
-    dateEtHeure = date();
+    dateEtHeure = (int *) date();
     //il y a deux switch pour une version du log qui à le nom de l'utilisateur et une autre sans l'utilisateur
     if (strlen(nom) == 3)
     {
@@ -190,10 +195,12 @@ void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
                 sprintf(dataDuLog,"L'utilisateur c'est nommé %s le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
+            //le joueur a quitter le programme
             case 7:
                 sprintf(dataDuLog,"%s à fermer le programme le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
+            //le joueur a quitter la partie
             case 8:
                 sprintf(dataDuLog,"%s à quitter la partie le %d.%d.%d %d:%d\n\n",nom, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
@@ -209,30 +216,32 @@ void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
                 sprintf(dataDuLog,"Anonyme à commencer une partie le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-                //le joueur a tirer
+            //le joueur a tirer
             case 2:
                 sprintf(dataDuLog,"Anonyme à tirer sur %d;%d le %d.%d.%d %d:%d\n\n", argument1, argument2, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-                //le joueur a gagner la partie
+            //le joueur a gagner la partie
             case 3:
                 sprintf(dataDuLog,"Anonyme à gagner avec un score de %d le %d.%d.%d %d:%d\n\n", argument1, *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-                //appelle la fonction pour l'aide
+            //appelle la fonction pour l'aide
             case 4:
                 sprintf(dataDuLog,"Anonyme à afficher l'aide le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
-                //le joueur appelle la fonction score
+            //le joueur appelle la fonction score
             case 5:
                 sprintf(dataDuLog,"Anonyme à afficher les scores le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
+            //le joueur a quitter le programme
             case 7:
                 sprintf(dataDuLog,"Anonyme à fermer le programme le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
                 break;
+            //le joueur a quitter la partie
             case 8:
                 sprintf(dataDuLog,"Anonyme à quitter la partie le %d.%d.%d %d:%d\n\n", *(dateEtHeure + 0), *(dateEtHeure + 1), *(dateEtHeure + 2), *(dateEtHeure + 3), *(dateEtHeure + 4));
                 fputs(dataDuLog,logs);
@@ -245,27 +254,25 @@ void enregistrementDesLogs(int typeDevenement, int argument1, int argument2)
 /**
  * prend un fichier et l'inscrit dans une varialbe
  */
-int recupereGrille()
+void recupereGrille()
 {
-    int grille[10][10];
-    FILE * fp;
-    fp = fopen("BD/Grille/1.txt", "r");
+    //déclaration et inizialisation des variables
+    int aleatoire = rand() % 5 + 1;
+    char cheminDuFichier[50];
+    //stoque le chemin d'une grille aléatoire
+    sprintf(cheminDuFichier,"BD/Grille/%d.txt",aleatoire);
+    FILE * fichierGrille;
+    fichierGrille = fopen(cheminDuFichier, "r");
+    printf("%s",cheminDuFichier);
 
-    if (fp == NULL)
+    if (fichierGrille == NULL)
     {
         printf("\nUne erreur est survenue lors de l'ouverture du fichier\n");
         pause();
-        return NULL;
+        return;
     }
-    for (int i = 0; i < 10; ++i)
-    {
-        for (int j = 0; j < 10; ++j)
-        {
-            fscanf(fp,"%d",&grille[i][j]);
-        }
-    }
-    fclose(fp);
-    return grille[10][10];
+    fgets((char *) grille, 100, fichierGrille);
+    fclose(fichierGrille);
 }
 
 /**
@@ -334,7 +341,7 @@ int verificationAuthentification()
         return 0;
     }
     //enregistre cette évènement dans le log
-    enregistrementDesLogs(6,NULL,NULL);
+    enregistrementDesLogs(6, (int) NULL, (int) NULL);
     return 1;
 }
 /**
@@ -367,7 +374,7 @@ void authentification()
  void score()
  {
      //enregistre cette évènement dans le log
-     enregistrementDesLogs(5,NULL,NULL);
+     enregistrementDesLogs(5, (int) NULL, (int) NULL);
      effacerEcran();
      char lettre;
      FILE *fp;
@@ -398,7 +405,7 @@ void authentification()
 void affichageGagner()
 {
     //enregistre cette évènement dans le log
-    enregistrementDesLogs(3,scoreJeux,NULL);
+    enregistrementDesLogs(3, scoreJeux, (int) NULL);
     effacerEcran();
     printf("Vous avez gagner !!!!!!!!!\n\n\n");
     printf("Score total: %d\n\n",scoreJeux);
@@ -423,9 +430,9 @@ int conditionGagner(int aireDeJeux[10][10])
         for (int colonneB = 0; colonneB < 10; ++colonneB)
         {
             //vérifie si un bateau a été touché et augmente le compteur pour ce bateaux
-            if (grille[colonneA][colonneB] > 0 && aireDeJeux[colonneA][colonneB] > 0)
+            if (grille[colonneA][colonneB ] - DECALAGE > 0 && aireDeJeux[colonneA][colonneB] > 0)
             {
-                switch (grille[colonneA][colonneB])
+                switch ((grille[colonneA][colonneB]) - DECALAGE)
                 {
                     case 1:
                         bateau_1++;
@@ -454,7 +461,7 @@ int conditionGagner(int aireDeJeux[10][10])
         //cette valeur est utilisé si le joueur a gagner
         aireDeJeux[9][9] = 100;
     }
-    return aireDeJeux;
+    return (int) aireDeJeux;
 }
 
 /**
@@ -466,7 +473,7 @@ int conditionGagner(int aireDeJeux[10][10])
  */
 int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
 {
-    if (grille[coordonneeY-1][coordonneeX-1] > 0)
+    if ((grille[coordonneeY][coordonneeX] - DECALAGE) > 0)
     {
         aireDeJeux[coordonneeY-1][coordonneeX-1] = 2;
         aireDeJeux[10][10] = conditionGagner(aireDeJeux);
@@ -481,7 +488,7 @@ int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
         printf("\n\nPlouf ^^\n");
         pause();
     }
-    return aireDeJeux;
+    return (int) aireDeJeux;
 }
 
 /**
@@ -504,16 +511,11 @@ int verificationDesCoordonnees(char coordonneeX,int coordonneeY,int aireDeJeux[1
     }
     else
     {
-        //int grille[][] = recupereGrille();
-        //if (grille == NULL)
-        //{
-        //    return;
-        //}
         //enregistre l'évènement du tire dans le log
         enregistrementDesLogs(2,coordonneeX,coordonneeY);
         aireDeJeux[10][10] = bateauToucher(coordonneeX,coordonneeY,aireDeJeux);
     }
-    return aireDeJeux;
+    return (int) aireDeJeux;
 }
 
 /**
@@ -559,7 +561,7 @@ void grilleBatailleNavale() {
     char coordonneeX;
     int coordonneeY;
     //enregistre cette évènement dans le log
-    enregistrementDesLogs(1,NULL,NULL);
+    enregistrementDesLogs(1, (int) NULL, (int) NULL);
     /**
      * sert a définir ou le joueur a déjà tirer, 0 = pas tirer dessus, 1 = à l'eau, 2 = bateau touché
      */
@@ -575,11 +577,20 @@ void grilleBatailleNavale() {
                               {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}};
     //rénitialise le score au début d'une nouvelle partie
     scoreJeux = 0;
+    //récupère une grille au hazard, ne pas mettre dans la boucle sinon elle va reprendre une grille aléatoirement
+    recupereGrille();
     //continue en boucle la bataille navale jusqu'à ce que le joueur a touché tout les bateaux
     do
     {
         effacerEcran();
-        recupereGrille();
+        for (int i = 0; i < 10; ++i)
+        {
+            for (int j = 0; j < 10; ++j)
+            {
+                printf("%d",(grille[j][i])-DECALAGE);
+            }
+            printf("\n");
+        }
         afficherLegende(0);
         //Légende
         legende();
@@ -676,7 +687,7 @@ void grilleBatailleNavale() {
 void affichageDaide()
 {
     effacerEcran();
-    enregistrementDesLogs(4,NULL,NULL);
+    enregistrementDesLogs(4, (int) NULL, (int) NULL);
     afficherLegende(2);
     printf("\n\nLe but du jeux est de coulé tout les bateaux sur la grille.\n\n");
     printf("Mettez les coordonnées x et y pour envoyé un missile sur cette case.\n\n");
@@ -712,7 +723,7 @@ void changementDesMenus(int choix)
             break;
         case 5:
             //enregistre cette évènement dans le log
-            enregistrementDesLogs(7,NULL,NULL);
+            enregistrementDesLogs(7, (int) NULL, (int) NULL);
             return;
     }
 }
