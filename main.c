@@ -53,23 +53,68 @@ char nom[3];
 /**
  * éfface tout ce qui est sur l'écran
  */
-void resetEcran()
+void effacerEcran()
 {
     system("cls");
 }
 
 /**
+ * mets en pause le programme
+ */
+void pause()
+{
+    system("pause");
+}
+
+void afficherLegende(int nombreDuChoix)
+{
+    switch (nombreDuChoix)
+    {
+        //L'écran de l'aide
+        case 2:
+            //faire 48 espace avant d'écrire le titre
+            printf("\n\n%47cAide\n\n",ESPACE);
+            //faire que la moitié des "-" ce trouve au milieu du titre
+            for (int i = 0; i < 98; ++i)
+            {
+                printf("-");
+            }
+            break;
+        case 3:
+            //faire 48 espace avant d'écrire le titre
+            printf("\n\n%47cScore\n\n",ESPACE);
+            //faire que la moitié des "-" ce trouve au milieu du titre
+            for (int i = 0; i < 98; ++i)
+            {
+                printf("-");
+            }
+            break;
+        case 4:
+            //faire 44 espace avant d'écrire le titre
+            printf("\n\n%43cAuthentification\n\n",ESPACE);
+            //faire que la moitié des "-" ce trouve au milieu du titre
+            for (int i = 0; i < 98; ++i)
+            {
+                printf("-");
+            }
+            break;
+        default:
+            //faire 45 espace avant d'écrire le titre
+            printf("\n\n%44cBataille Navale\n\n",ESPACE);
+            //faire que la moitié des "-" ce trouve au milieu du titre
+            for (int i = 0; i < 98; ++i)
+            {
+                printf("-");
+            }
+    }
+
+}
+/**
  * Le menu principale du jeu
  */
 void menu()
 {
-    //faire 20 espace avant d'écrire le titre
-    printf("\n\n%39cBataille Navale\n\n",ESPACE);
-    //faire que la moitié des "-" ce trouve au milieu du titre
-    for (int i = 0; i < 98; ++i)
-    {
-        printf("-");
-    }
+    afficherLegende(0);
     printf("\n\nJouer: 1\n");
     printf("Aide: 2\n");
     printf("Score: 3\n");
@@ -89,7 +134,7 @@ int recupereGrille()
     if (fp == NULL)
     {
         printf("\nUne erreur est survenue lors de l'ouverture du fichier\n");
-        system("pause");
+        pause();
         return NULL;
     }
     for (int i = 0; i < 10; ++i)
@@ -117,7 +162,7 @@ void enregistrementScore()
     if (fp == NULL)
     {
         printf("\nUne erreur est survenue lors de l'ouverture du fichier\n");
-        system("pause");
+        pause();
         return;
     }
     //ajoute la donnée dans le fichier
@@ -130,14 +175,18 @@ void enregistrementScore()
  */
 void affichageEcranScore()
 {
-    //faire 20 espace avant d'écrire le titre
-    printf("\n\n%49cScore\n\n",ESPACE);
-    //faire que la moitié des "-" ce trouve au milieu du titre
-    for (int i = 0; i < 98; ++i)
-    {
-        printf("-");
-    }
+    afficherLegende(3);
     printf("\n%24cNom:%49cScore:\n\n",ESPACE,ESPACE);
+}
+
+/**
+ * demande à l'utilisateur de s'authentifier
+ */
+void ecranDemandeDauthentification()
+{
+    afficherLegende(4);
+    printf("\n\nVeuiller vous authentifier avant de commencer une partie.");
+    pause();
 }
 
 /**
@@ -157,16 +206,10 @@ int verificationAuthentification()
 {
     while (strlen(nom) != 3)
     {
-        system("cls");
-        //faire 40 espace avant d'écrire le titre
-        printf("\n\n%39cAuthentification\n\n",ESPACE);
-        //faire que la moitié des "-" ce trouve au milieu du titre
-        for (int i = 0; i < 98; ++i)
-        {
-            printf("-");
-        }
+        effacerEcran();
+        afficherLegende(4);
         printf("\n\nLe nom d'utilisateur doit être exactement 3 character\n");
-        system("pause");
+        pause();
         return 0;
     }
     return 1;
@@ -188,14 +231,8 @@ void authentification()
     int valide;
     while (valide != 1)
     {
-        system("cls");
-        //faire 40 espace avant d'écrire le titre
-        printf("\n\n%44cAuthentification\n\n",ESPACE);
-        //faire que la moitié des "-" ce trouve au milieu du titre
-        for (int i = 0; i < 98; ++i)
-        {
-            printf("-");
-        }
+        effacerEcran();
+        afficherLegende(4);
         printf("\n%24cNom:%49c",ESPACE,ESPACE);
         valide = nomAuthentification();
     }
@@ -206,7 +243,7 @@ void authentification()
  */
  void score()
  {
-     resetEcran();
+     effacerEcran();
      char lettre;
      FILE *fp;
      //mode l'écture
@@ -215,7 +252,7 @@ void authentification()
      if (fp == NULL)
      {
          printf("Une erreur est survenue lors de l'ouverture du fichier\n");
-         system("pause");
+         pause();
          return;
      }
      affichageEcranScore();
@@ -227,18 +264,18 @@ void authentification()
 
      printf("\n");
      fclose(fp);
-     system("pause");
+     pause();
  }
 /**
  * affiche l'écran de victoire
  */
 void affichageGagner()
 {
-    resetEcran();
+    effacerEcran();
     printf("Vous avez gagner !!!!!!!!!\n\n\n");
     printf("Score total: %d\n\n",scoreJeux);
     enregistrementScore();
-    system("pause");
+    pause();
 }
 
 /**
@@ -307,14 +344,14 @@ int bateauToucher(char coordonneeX,int coordonneeY,int aireDeJeux[10][10])
         aireDeJeux[10][10] = conditionGagner(aireDeJeux);
         scoreJeux = scoreJeux + 100;
         printf("\n\nToucher ^^\n");
-        system("pause");
+        pause();
     }
     else
     {
         aireDeJeux[coordonneeY-1][coordonneeX-1] = 1;
         scoreJeux = scoreJeux - 10;
         printf("\n\nPlouf ^^\n");
-        system("pause");
+        pause();
     }
     return aireDeJeux;
 }
@@ -330,12 +367,12 @@ int verificationDesCoordonnees(char coordonneeX,int coordonneeY,int aireDeJeux[1
     if (coordonneeX < 1 || coordonneeX > 10 || coordonneeY < 1 ||coordonneeY >10)
     {
         printf("\n\nCes coordonnée ne sont pas valide\n");
-        system("pause");
+        pause();
     }
     else if (aireDeJeux[coordonneeY - 1][coordonneeX - 1] != 0)
     {
         printf("\n\nCette case à déjà été touché\n");
-        system("pause");
+        pause();
     }
     else
     {
@@ -354,7 +391,7 @@ int verificationDesCoordonnees(char coordonneeX,int coordonneeY,int aireDeJeux[1
  */
 void legende()
 {
-    printf("▓ == Touché\n\n");
+    printf("\n\n▓ == Touché\n\n");
     printf("░ == à l'eau\n\n");
     printf("Coordonnée Z:0 == quitter\n\n");
 }
@@ -408,9 +445,9 @@ void grilleBatailleNavale() {
     //continue en boucle la bataille navale jusqu'à ce que le joueur a touché tout les bateaux
     do
     {
-        resetEcran();
+        effacerEcran();
         recupereGrille();
-        printf("\n================================== ~~~~~  Bataille Navale  ~~~~~ ==================================\n\n");
+        afficherLegende(0);
         //Légende
         legende();
         for (int legende = 0; legende < 10; ++legende)
@@ -504,13 +541,13 @@ void grilleBatailleNavale() {
  */
 void affichageDaide()
 {
-    resetEcran();
-    printf("================================== ~~~~~  Aide du jeux  ~~~~~ ==================================\n\n\n\n");
-    printf("\nLe but du jeux est de coulé tout les bateaux sur la grille.\n\n");
+    effacerEcran();
+    afficherLegende(2);
+    printf("\n\nLe but du jeux est de coulé tout les bateaux sur la grille.\n\n");
     printf("Mettez les coordonnées x et y pour envoyé un missile sur cette case.\n\n");
     printf("vous saurez si vous avez touché un bateau par un symbol, ▓ si le missile a touché un bateau et ░ si il a loupé.\n\n");
     printf("Utiliser le moin de missile au total pour avoir le plus de point.\n\n\n\n\n\n");
-    system("pause");
+    pause();
 }
 
 void changementDesMenus(int choix)
@@ -518,8 +555,16 @@ void changementDesMenus(int choix)
     switch (choix)
     {
         case 1:
-            //Affiche la grille pour la bataille navale et éxecute les autres fonctions pour la bataille navale
-            grilleBatailleNavale();
+            //Si le joueur c'est authentifier, il peux commencer une partie, sinon il ne peux pas
+            if (nom == NULL)
+            {
+                ecranDemandeDauthentification();
+            }
+            else
+            {
+                //Affiche la grille pour la bataille navale et éxecute les autres fonctions pour la bataille navale
+                grilleBatailleNavale();
+            }
             break;
         case 2:
             affichageDaide();
@@ -563,7 +608,7 @@ int main(void)
     do
     {
         //efface
-        resetEcran();
+        effacerEcran();
         //affichage du menu
         menu();
         //demande le choix de l'utilisateur
