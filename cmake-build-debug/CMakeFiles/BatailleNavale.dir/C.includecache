@@ -6,7 +6,7 @@
 
 #IncludeRegexTransform: 
 
-C:/code/BatailleNavale/main.c
+D:/code/gitProjects/BatailleNavale/main.c
 stdio.h
 -
 stdlib.h
